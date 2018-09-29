@@ -10,9 +10,7 @@ base_url = 'https://www.woyaogexing.com/touxiang/z/nanom/'
 headers = {
     'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
 }
-driver = webdriver.Chrome()
-driver.implicitly_wait(10)
-driver.maximize_window()
+
 
 #获取每一页的链接
 def get_index():
@@ -23,9 +21,8 @@ def get_index():
     return urllist
 #获取每一页的数据
 def get_data(url):
-    driver.get(url)
-    time.sleep(2)
-    data = driver.page_source
+    response = requests.get(url)
+    data = response.text
     return data
 #获取每页中每个头像集合的链接
 def get_href(data):
@@ -42,15 +39,15 @@ def get_pic(pages):
     url_1 = 'https://www.woyaogexing.com'
     for page in pages:
         url = url_1 + page
-        time.sleep(2)
-        driver.get(url)
-        html = driver.page_source
+        # time.sleep(2)
+        response = requests.get(url)
+        html = response.text
         soup = BeautifulSoup(html,'lxml')
         imgs = soup.find_all('a',{'class':'swipebox'})
 
         print("正在下载")
         for img in imgs:
-            time.sleep(round(random.uniform(1,2),2))
+            # time.sleep(round(random.uniform(1,2),2))
             src = img.get('href')
             src = 'https:' + src
             print("正在下载第{}张图片".format(x))
